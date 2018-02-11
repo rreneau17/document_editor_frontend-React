@@ -5,6 +5,11 @@ import TitleBox from './TitleBox';
 import TextBox from './TextBox';
 import EditBox from './EditBox';
 
+import {
+  BrowserRouter as Router,
+  Route
+} from 'react-router-dom';
+
 import { API } from './config';
 import axios from 'axios';
 
@@ -12,7 +17,9 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      posts: []
+      posts: [],
+      isEditing: false,
+      titleNum: -1
     };
   }
 
@@ -22,8 +29,7 @@ class App extends Component {
       .then(blogPosts => {
         this.setState({
           posts: blogPosts,
-          titleNum: 0,
-          isEditing: false
+          titleNum: 0
         });
       })
   }
