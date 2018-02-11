@@ -36,3 +36,8 @@
   border-color: black;
   list-style: none;
 }
+
+.text-styles {
+  border: 5px;
+  border-color: black;
+}
