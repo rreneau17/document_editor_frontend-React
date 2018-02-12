@@ -18,7 +18,6 @@ class App extends Component {
     super(props);
     this.state = {
       posts: [],
-      isEditing: false,
       titleNum: -1
     };
   }
@@ -50,6 +49,23 @@ class App extends Component {
               return null;
             }
         }}/>
+        <Route path="/posts/:postId/edit" render={({match, history}) => {
+          let postId = match.params.postId;
+          postId = parseInt(postId, 10);
+
+          const docItem = this.state.posts.find(d => d.id === postId);
+          if(this.state.posts.length > 0) {
+            return <EditBox 
+              selDoc={docItem}
+              changeHandler={this._saveContent}
+              finishEdits={() => {
+                history.push(`/posts/${postId}`);
+              }}
+              />  
+          } else {
+            return null;
+          } 
+        }} />
       </div>
       </Router>
     );
@@ -62,23 +78,23 @@ class App extends Component {
     });  
   }
 
-  _setEditing = (editVal) => {
-    this.setState ({
-      isEditing: editVal
-    })
-    // console.log(this.state.isEditing);
-  }
+  // _setEditing = (editVal) => {
+  //   this.setState ({
+  //     isEditing: editVal
+  //   })
+  //   console.log(this.state.isEditing);
+  // }
 
-  _saveContent = (newContent) => {
-    const currentItem = this.state.posts[this.state.titleNum];
+  _saveContent = (newContent, postId) => {
+    const currentItem = this.state.posts.find(d => d.id === postId);
     axios.post(`${API}/blog/${currentItem.id}/edit`, {
       ...currentItem,       
       content: newContent   
     })
     .then(resp => resp.data)
     .then(result => {
-      const updatedContent = this.state.posts.map((data, index) => {
-        if(index === this.state.titlNum) {
+      const updatedContent = this.state.posts.map((data) => {
+        if(data.id === postId) {
           return result;
         } else {
           return data;

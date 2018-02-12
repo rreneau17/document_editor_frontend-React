@@ -26,8 +26,8 @@ class EditBox extends React.Component {
     }
 
     saveChanges = () => {
-        this.props.handleClick(false)
-        this.props.changeHandler(this.state.content)
+        this.props.changeHandler(this.state.content, this.props.selDoc.id)
+        this.props.finishEdits();
     }
 
 
