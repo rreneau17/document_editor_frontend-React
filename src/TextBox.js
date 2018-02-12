@@ -8,7 +8,6 @@ const TextBox = (props) => {
         <div className="text-styles">
             <h2>CONTENT</h2>
             {props.selDoc.content}
-            <button onClick={ () => { props.handleClick(true) }}>EDIT</button>
         </div>
     );
   };

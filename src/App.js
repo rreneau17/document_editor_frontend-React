@@ -5,6 +5,11 @@ import TitleBox from './TitleBox';
 import TextBox from './TextBox';
 import EditBox from './EditBox';
 
+import {
+  BrowserRouter as Router,
+  Route
+} from 'react-router-dom';
+
 import { API } from './config';
 import axios from 'axios';
 
@@ -12,7 +17,9 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      posts: []
+      posts: [],
+      isEditing: false,
+      titleNum: -1
     };
   }
 
@@ -23,34 +30,28 @@ class App extends Component {
         this.setState({
           posts: blogPosts,
           titleNum: 0,
-          isEditing: false
         });
       })
   }
 
   render() {
-    // console.log(this.state.posts)
-    let textBox = null;
-    if (this.state.posts.length > 0) {
-      console.log(this.state.isEditing)
-      if (this.state.isEditing) {
-        textBox = (<EditBox 
-          selDoc={this.state.posts[this.state.titleNum]} 
-          changeHandler={this._saveContent}
-          handleClick={this._setEditing} 
-          />); 
-      } else {
-        textBox = (<TextBox 
-          selDoc={this.state.posts[this.state.titleNum]} 
-          handleClick={this._setEditing} 
-          />);
-      }
-    }
     return (
+      <Router>
       <div className="main-container">
-        <TitleBox data={this.state.posts} handleClick={this._setTitleNum}/>
-        {textBox}
+        <TitleBox docData={this.state.posts} handleClick={this._setTitleNum}/>
+        <Route path="/posts/:postId" render={({match}) => {
+            let postId = match.params.postId;
+            postId = parseInt(postId, 10);
+            console.log(postId);
+            const docItem = this.state.posts.find(d => d.id === postId); 
+            if(this.state.posts.length > 0) {
+              return <TextBox selDoc={docItem} />
+            } else {
+              return null;
+            }
+        }}/>
       </div>
+      </Router>
     );
   }
 

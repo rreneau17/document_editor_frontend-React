@@ -1,21 +1,26 @@
 import React from 'react';
-import SelectTitle from './SelectTitle';
+import {
+    Link
+} from 'react-router-dom'
 
-const TitleBox = (props) => {
-    const titleArray = props.data.map((d,i) => {
+const TitleBox = ({
+    docData = [],
+    handleClick = () =>{}
+    }) => {
+    const listItems = docData.map((d, i) => {
         return (
-            <SelectTitle
-            index={i}
-            handleClick={props.handleClick}
-            title={d.title} />
-        );
-    })
+        <li key={d.id}>
+            <Link to={`/posts/${d.id}`}>
+                {d.title}
+            </Link>
+        </li>
+        )
+    }) 
     return (
-        <div className="title-styles">
-                <h2>TITLE</h2>
-                {titleArray}
-            </div>
+        <ul>
+            {listItems}
+        </ul>
     );
-  };
+};
 
 export default TitleBox;
